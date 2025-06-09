@@ -30,7 +30,7 @@ skipApi.interceptors.response.use(
   (error) => {
     const apiError: ApiError = {
       message:
-        error.response?.data?.message || error.message || "An error occurred",
+        error.response?.data?.error || error.message || "An error occurred",
       status: error.response?.status,
     };
     return Promise.reject(apiError);
