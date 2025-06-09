@@ -1,4 +1,4 @@
-import SkipDataTest from "./components/SkipDataTest";
+import SkipDataTest from "./components/tests/SkipDataTest";
 import "./styles/App.css";
 
 function App() {

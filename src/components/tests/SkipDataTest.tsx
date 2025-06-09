@@ -1,10 +1,10 @@
 import React from "react";
-import { useSkipData } from "../hooks/useSkipData";
+import { useSkipData } from "../../hooks/useSkipData";
 import {
   formatPrice,
   getSkipDisplayName,
   getHirePeriodText,
-} from "../utils/formatters";
+} from "../../utils/formatters";
 
 const SkipDataTest: React.FC = () => {
   const { skips, loading, error, refetch } = useSkipData("NR32", "Lowestoft");
