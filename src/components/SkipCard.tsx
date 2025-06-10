@@ -113,7 +113,7 @@ const SkipCard: React.FC<SkipCardProps> = ({
         <div className="text-3xl font-bold text-gray-900 mb-1">
           {formatPrice(skip.price_before_vat, skip.vat)}
         </div>
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-gray-400 underline">
           {getHirePeriodText(skip.hire_period_days)}
         </div>
       </div>
