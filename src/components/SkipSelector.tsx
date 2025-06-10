@@ -143,7 +143,7 @@ const SkipSelector: React.FC<SkipSelectorProps> = ({
 
       {/* Skip Cards */}
       <div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-14"
         role="radiogroup"
         aria-label="Skip size options"
       >
