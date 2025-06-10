@@ -35,15 +35,18 @@ const FeatureItem: React.FC<FeatureItemProps> = React.memo(
     notAllowedText = "not allowed",
   }) => {
     const Icon = isAllowed ? CircleCheckBig : CircleX;
-    const iconColor = isAllowed ? "text-green-500" : "text-red-500";
+    const iconColor = isAllowed ? "text-green-700" : "text-red-700";
     const statusText = isAllowed ? allowedText : notAllowedText;
 
     return (
-      <div className="flex items-center text-sm text-gray-600">
+      <div className="flex items-center text-sm text-gray-800">
         <Suspense fallback={null}>
-          <Icon className={`w-4 h-4 mr-2 ${iconColor}`} />
+          <Icon className={`w-4 h-4 mr-2 ${iconColor}`} aria-hidden="true" />
         </Suspense>
-        {label} {statusText}
+        <span className="sr-only">
+          {label} {statusText}
+        </span>
+        <span aria-hidden="true">{label} {statusText}</span>
       </div>
     );
   }
@@ -65,7 +68,7 @@ const SkipCard: React.FC<SkipCardProps> = React.memo(
     };
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
-      if (event.key === "Enter" || event.key === "") {
+      if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
         handleSelect();
       }
@@ -75,10 +78,10 @@ const SkipCard: React.FC<SkipCardProps> = React.memo(
       <div
         className={`
         relative bg-white rounded-xl shadow-sm border-2 transition-all duration-200 cursor-pointer
-        hover:shadow-lg hover:scale-[1.02] focus-within:ring-2 focus-within:ring-blue-500
+        hover:shadow-lg hover:scale-[1.02] focus-within:ring-2 focus-within:ring-blue-700
         ${
           isSelected
-            ? "border-blue-500 bg-blue-50 shadow-lg"
+            ? "border-blue-700 bg-blue-50 shadow-lg"
             : "border-gray-200 hover:border-gray-300"
         }
         ${className}
@@ -86,15 +89,15 @@ const SkipCard: React.FC<SkipCardProps> = React.memo(
         onClick={handleSelect}
         onKeyDown={handleKeyDown}
         tabIndex={0}
-        role="button"
-        aria-pressed={isSelected}
+        role="radio"
+        aria-checked={isSelected}
         aria-label={`Select ${getSkipDisplayName(skip.size)} for ${formatPrice(
           skip.price_before_vat,
           skip.vat
         )}`}
       >
         {/* Size display */}
-        <span className="absolute -top-4 -right-3 font-bold text-white px-3 py-1 rounded-full bg-blue-500 shadow-lg">
+        <span className="absolute -top-4 -right-3 font-bold text-white px-3 py-1 rounded-full bg-blue-700 shadow-lg">
           {getSkipDisplayName(skip.size)}
         </span>
 
@@ -119,7 +122,7 @@ const SkipCard: React.FC<SkipCardProps> = React.memo(
           <div className="text-3xl font-bold text-gray-900 mb-1">
             {formatPrice(skip.price_before_vat, skip.vat)}
           </div>
-          <div className="text-sm text-gray-400 underline">
+          <div className="text-sm text-gray-700 underline">
             {getHirePeriodText(skip.hire_period_days)}
           </div>
         </div>
@@ -139,8 +142,8 @@ const SkipCard: React.FC<SkipCardProps> = React.memo(
             focus:outline-none focus:ring-2 focus:ring-offset-2
             ${
               isSelected
-                ? "bg-blue-500 text-white hover:bg-blue-600 focus:ring-blue-500"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200 focus:ring-gray-500"
+                ? "bg-blue-700 text-white hover:bg-blue-800 focus:ring-blue-700"
+                : "bg-gray-100 text-gray-800 hover:bg-gray-200 focus:ring-gray-700"
             }
           `}
             aria-label={
