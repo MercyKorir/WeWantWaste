@@ -21,7 +21,7 @@ interface FeatureItemProps {
   notAllowedText?: string;
 }
 
-const FeatureItem: React.FC<FeatureItemProps> = ({
+const FeatureItem: React.FC<FeatureItemProps> = React.memo(({
   isAllowed,
   label,
   allowedText = "allowed",
@@ -37,18 +37,18 @@ const FeatureItem: React.FC<FeatureItemProps> = ({
       {label} {statusText}
     </div>
   );
-};
+});
 
-const FeaturesSection: React.FC<{ skip: Skip }> = ({ skip }) => (
+const FeaturesSection: React.FC<{ skip: Skip }> = React.memo(({ skip }) => (
   <div className="px-6 pb-6">
     <div className="space-y-2">
       <FeatureItem isAllowed={skip.allowed_on_road} label="Road placement" />
       <FeatureItem isAllowed={skip.allows_heavy_waste} label="Heavy waste" />
     </div>
   </div>
-);
+));
 
-const SkipCard: React.FC<SkipCardProps> = ({
+const SkipCard: React.FC<SkipCardProps> = React.memo(({
   skip,
   isSelected,
   onSelect,
@@ -148,6 +148,6 @@ const SkipCard: React.FC<SkipCardProps> = ({
       </div>
     </div>
   );
-};
+});
 
 export default SkipCard;

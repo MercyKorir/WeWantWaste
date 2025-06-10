@@ -1,6 +1,6 @@
 import React from "react";
 
-const SkipCardSkeleton: React.FC = () => {
+const SkipCardSkeleton: React.FC = React.memo(() => {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 animate-pulse">
       <div className="flex justify-between items-start mb-4">
@@ -23,6 +23,6 @@ const SkipCardSkeleton: React.FC = () => {
       <div className="h-12 bg-gray-200 rounded-lg w-full"></div>
     </div>
   );
-};
+});
 
 export default SkipCardSkeleton;

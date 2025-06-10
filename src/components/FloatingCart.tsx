@@ -14,7 +14,7 @@ interface FloatingCartProps {
   isVisible: boolean;
 }
 
-const FloatingCart: React.FC<FloatingCartProps> = ({
+const FloatingCart: React.FC<FloatingCartProps> = React.memo(({
   selectedSkip,
   onContinue,
   onClear,
@@ -209,6 +209,6 @@ const FloatingCart: React.FC<FloatingCartProps> = ({
       )}
     </div>
   );
-};
+});
 
 export default FloatingCart;

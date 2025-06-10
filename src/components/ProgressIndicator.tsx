@@ -48,7 +48,7 @@ const steps = [
   },
 ];
 
-const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
+const ProgressIndicator: React.FC<ProgressIndicatorProps> = React.memo(({
   selectedSkip,
   currentStepID,
   handleBack,
@@ -279,6 +279,6 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
       </div>
     </>
   );
-};
+});
 
 export default ProgressIndicator;

@@ -1,6 +1,6 @@
 import React from "react";
 
-const Header: React.FC = () => {
+const Header: React.FC = React.memo(() => {
   return (
     <header className="fixed top-0 left-0 right-0 px-4 py-6 sm:py-8 sm:px-6 lg:px-8 shadow-sm z-50 bg-white">
       <div className="max-w-7xl mx-auto">
@@ -21,6 +21,6 @@ const Header: React.FC = () => {
       </div>
     </header>
   );
-};
+});
 
 export default Header;

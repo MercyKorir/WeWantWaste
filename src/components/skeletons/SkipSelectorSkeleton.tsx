@@ -1,7 +1,7 @@
 import React from "react";
 import SkipCardSkeleton from "./SkipCardSkeleton";
 
-const SkipSelectorSkeleton: React.FC = () => {
+const SkipSelectorSkeleton: React.FC = React.memo(() => {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="text-center mb-8">
@@ -21,6 +21,6 @@ const SkipSelectorSkeleton: React.FC = () => {
       </div>
     </div>
   );
-};
+});
 
 export default SkipSelectorSkeleton;
