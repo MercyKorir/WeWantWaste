@@ -1,10 +1,13 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, Suspense } from "react";
 import type { Skip } from "../types";
 import { useSkipData } from "../hooks/useSkipData";
 import SkipCard from "./SkipCard";
 import ProgressIndicator from "./ProgressIndicator";
-import SkipSelectorSkeleton from "./skeletons/SkipSelectorSkeleton";
-import FloatingCart from "./FloatingCart";
+
+const SkipSelectorSkeleton = React.lazy(() =>
+  import("./skeletons/SkipSelectorSkeleton")
+);
+const FloatingCart = React.lazy(() => import("./FloatingCart"));
 
 interface SkipSelectorProps {
   postcode: string;
@@ -56,7 +59,11 @@ const SkipSelector: React.FC<SkipSelectorProps> = ({
   }, []);
 
   if (loading) {
-    return <SkipSelectorSkeleton />;
+    return (
+      <Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
+        <SkipSelectorSkeleton />
+      </Suspense>
+    );
   }
 
   if (error) {
@@ -130,7 +137,9 @@ const SkipSelector: React.FC<SkipSelectorProps> = ({
   }
 
   return (
-    <div className={`max-w-7xl mx-auto px-4 pt-28 pb-8 sm:pt-34 sm:pb-8 ${className}`}>
+    <div
+      className={`max-w-7xl mx-auto px-4 pt-28 pb-8 sm:pt-34 sm:pb-8 ${className}`}
+    >
       {/* Header */}
       <div className="text-center mb-10 sm:mb-12">
         <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-2 sm:mb-4">
@@ -165,12 +174,14 @@ const SkipSelector: React.FC<SkipSelectorProps> = ({
       />
 
       {/* Floating Selection Cart */}
-      <FloatingCart
-        selectedSkip={selectedSkip}
-        onContinue={handleContinue}
-        onClear={handleClearSelection}
-        isVisible={!!selectedSkip}
-      />
+      <Suspense fallback={null}>
+        <FloatingCart
+          selectedSkip={selectedSkip}
+          onContinue={handleContinue}
+          onClear={handleClearSelection}
+          isVisible={!!selectedSkip}
+        />
+      </Suspense>
     </div>
   );
 };
