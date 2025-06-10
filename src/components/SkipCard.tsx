@@ -1,11 +1,17 @@
-import React from "react";
+import React, { Suspense } from "react";
 import type { Skip } from "../types";
 import {
   formatPrice,
   getSkipDisplayName,
   getHirePeriodText,
 } from "../utils/formatters";
-import { CircleCheckBig, CircleX } from "lucide-react";
+
+const CircleCheckBig = React.lazy(() =>
+  import("lucide-react").then((m) => ({ default: m.CircleCheckBig }))
+);
+const CircleX = React.lazy(() =>
+  import("lucide-react").then((m) => ({ default: m.CircleX }))
+);
 
 interface SkipCardProps {
   skip: Skip;
@@ -21,23 +27,27 @@ interface FeatureItemProps {
   notAllowedText?: string;
 }
 
-const FeatureItem: React.FC<FeatureItemProps> = React.memo(({
-  isAllowed,
-  label,
-  allowedText = "allowed",
-  notAllowedText = "not allowed",
-}) => {
-  const Icon = isAllowed ? CircleCheckBig : CircleX;
-  const iconColor = isAllowed ? "text-green-500" : "text-red-500";
-  const statusText = isAllowed ? allowedText : notAllowedText;
+const FeatureItem: React.FC<FeatureItemProps> = React.memo(
+  ({
+    isAllowed,
+    label,
+    allowedText = "allowed",
+    notAllowedText = "not allowed",
+  }) => {
+    const Icon = isAllowed ? CircleCheckBig : CircleX;
+    const iconColor = isAllowed ? "text-green-500" : "text-red-500";
+    const statusText = isAllowed ? allowedText : notAllowedText;
 
-  return (
-    <div className="flex items-center text-sm text-gray-600">
-      <Icon className={`w-4 h-4 mr-2 ${iconColor}`} />
-      {label} {statusText}
-    </div>
-  );
-});
+    return (
+      <div className="flex items-center text-sm text-gray-600">
+        <Suspense fallback={null}>
+          <Icon className={`w-4 h-4 mr-2 ${iconColor}`} />
+        </Suspense>
+        {label} {statusText}
+      </div>
+    );
+  }
+);
 
 const FeaturesSection: React.FC<{ skip: Skip }> = React.memo(({ skip }) => (
   <div className="px-6 pb-6">
@@ -48,26 +58,22 @@ const FeaturesSection: React.FC<{ skip: Skip }> = React.memo(({ skip }) => (
   </div>
 ));
 
-const SkipCard: React.FC<SkipCardProps> = React.memo(({
-  skip,
-  isSelected,
-  onSelect,
-  className = "",
-}) => {
-  const handleSelect = () => {
-    onSelect(skip);
-  };
+const SkipCard: React.FC<SkipCardProps> = React.memo(
+  ({ skip, isSelected, onSelect, className = "" }) => {
+    const handleSelect = () => {
+      onSelect(skip);
+    };
 
-  const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === "Enter" || event.key === "") {
-      event.preventDefault();
-      handleSelect();
-    }
-  };
+    const handleKeyDown = (event: React.KeyboardEvent) => {
+      if (event.key === "Enter" || event.key === "") {
+        event.preventDefault();
+        handleSelect();
+      }
+    };
 
-  return (
-    <div
-      className={`
+    return (
+      <div
+        className={`
         relative bg-white rounded-xl shadow-sm border-2 transition-all duration-200 cursor-pointer
         hover:shadow-lg hover:scale-[1.02] focus-within:ring-2 focus-within:ring-blue-500
         ${
@@ -77,58 +83,58 @@ const SkipCard: React.FC<SkipCardProps> = React.memo(({
         }
         ${className}
       `}
-      onClick={handleSelect}
-      onKeyDown={handleKeyDown}
-      tabIndex={0}
-      role="button"
-      aria-pressed={isSelected}
-      aria-label={`Select ${getSkipDisplayName(skip.size)} for ${formatPrice(
-        skip.price_before_vat,
-        skip.vat
-      )}`}
-    >
-      {/* Size display */}
-      <span className="absolute -top-4 -right-3 font-bold text-white px-3 py-1 rounded-full bg-blue-500 shadow-lg">
-        {getSkipDisplayName(skip.size)}
-      </span>
+        onClick={handleSelect}
+        onKeyDown={handleKeyDown}
+        tabIndex={0}
+        role="button"
+        aria-pressed={isSelected}
+        aria-label={`Select ${getSkipDisplayName(skip.size)} for ${formatPrice(
+          skip.price_before_vat,
+          skip.vat
+        )}`}
+      >
+        {/* Size display */}
+        <span className="absolute -top-4 -right-3 font-bold text-white px-3 py-1 rounded-full bg-blue-500 shadow-lg">
+          {getSkipDisplayName(skip.size)}
+        </span>
 
-      {/* Skip Image */}
-      <div className="px-6 pt-6 pb-4">
-        <div className="w-full h-48 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center overflow-hidden">
-          <div className="relative">
-            <div className="w-32 h-20 bg-yellow-500 rounded-t-lg border-4 border-yellow-700 transform perspective-1000 rotate-x-12">
-              <div className="absolute inset-2 bg-yellow-600 rounded"></div>
-              <div className="absolute top-1 left-1 w-4 h-4 bg-yellow-800 rounded opacity-50"></div>
-              <div className="absolute bottom-1 right-1 text-yellow-900 text-xs font-bold">
-                {skip.size}Y
+        {/* Skip Image */}
+        <div className="px-6 pt-6 pb-4">
+          <div className="w-full h-48 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center overflow-hidden">
+            <div className="relative">
+              <div className="w-32 h-20 bg-yellow-500 rounded-t-lg border-4 border-yellow-700 transform perspective-1000 rotate-x-12">
+                <div className="absolute inset-2 bg-yellow-600 rounded"></div>
+                <div className="absolute top-1 left-1 w-4 h-4 bg-yellow-800 rounded opacity-50"></div>
+                <div className="absolute bottom-1 right-1 text-yellow-900 text-xs font-bold">
+                  {skip.size}Y
+                </div>
               </div>
+              <div className="w-36 h-3 bg-yellow-700 rounded-b-sm -mt-1"></div>
             </div>
-            <div className="w-36 h-3 bg-yellow-700 rounded-b-sm -mt-1"></div>
           </div>
         </div>
-      </div>
 
-      {/* Price */}
-      <div className="px-6 pb-4">
-        <div className="text-3xl font-bold text-gray-900 mb-1">
-          {formatPrice(skip.price_before_vat, skip.vat)}
+        {/* Price */}
+        <div className="px-6 pb-4">
+          <div className="text-3xl font-bold text-gray-900 mb-1">
+            {formatPrice(skip.price_before_vat, skip.vat)}
+          </div>
+          <div className="text-sm text-gray-400 underline">
+            {getHirePeriodText(skip.hire_period_days)}
+          </div>
         </div>
-        <div className="text-sm text-gray-400 underline">
-          {getHirePeriodText(skip.hire_period_days)}
-        </div>
-      </div>
 
-      {/* Features */}
-      <FeaturesSection skip={skip} />
+        {/* Features */}
+        <FeaturesSection skip={skip} />
 
-      {/* Selection Button */}
-      <div className="px-6 pb-6">
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            handleSelect();
-          }}
-          className={`
+        {/* Selection Button */}
+        <div className="px-6 pb-6">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleSelect();
+            }}
+            className={`
             w-full py-3 px-4 rounded-lg font-semibold transition-all duration-200
             focus:outline-none focus:ring-2 focus:ring-offset-2
             ${
@@ -137,17 +143,18 @@ const SkipCard: React.FC<SkipCardProps> = React.memo(({
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200 focus:ring-gray-500"
             }
           `}
-          aria-label={
-            isSelected
-              ? "Skip selected"
-              : `Select ${getSkipDisplayName(skip.size)}`
-          }
-        >
-          {isSelected ? "Selected" : "Select This Skip"}
-        </button>
+            aria-label={
+              isSelected
+                ? "Skip selected"
+                : `Select ${getSkipDisplayName(skip.size)}`
+            }
+          >
+            {isSelected ? "Selected" : "Select This Skip"}
+          </button>
+        </div>
       </div>
-    </div>
-  );
-});
+    );
+  }
+);
 
 export default SkipCard;
