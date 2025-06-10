@@ -11,7 +11,7 @@ const Header: React.FC = () => {
             </div>
             <h1 className="text-2xl font-bold text-gray-700">WeWantWaste</h1>
           </div>
-          <div className="hidden sm:block text-white text-sm font-medium">
+          <div className="hidden sm:block text-white font-medium">
             <span className="text-gray-400">Need help?</span>{" "}
             <span className="text-blue-500 hover:text-blue-400 cursor-pointer">
               Contact Us
