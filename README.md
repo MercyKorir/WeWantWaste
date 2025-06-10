@@ -1,7 +1,7 @@
 # Skip Selection Redesign - WeWantWaste Challenge
 
 **Live Demo:** [https://we-want-waste-rouge.vercel.app/](https://we-want-waste-rouge.vercel.app/)  
-**Developer:** [https://github.com/MercyKorir](Mercy Chelangat)
+**Developer:** [Mercy Chelangat](https://mercykorir.github.io/my_portfolio/)
 
 ## Challenge Overview
 
