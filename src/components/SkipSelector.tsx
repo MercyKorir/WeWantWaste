@@ -68,13 +68,14 @@ const SkipSelector: React.FC<SkipSelectorProps> = ({
 
   if (error) {
     return (
-      <div className="max-w-2xl mx-auto px-4 py-12 text-center">
+      <div className="max-w-2xl mx-auto px-4 py-12 text-center" role="alert" aria-live="assertive">
         <div className="bg-red-50 border border-red-200 rounded-xl p-8">
           <svg
             className="w-12 h-12 text-red-500 mx-auto mb-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path
               strokeLinecap="round"
@@ -92,7 +93,8 @@ const SkipSelector: React.FC<SkipSelectorProps> = ({
           </p>
           <button
             onClick={refetch}
-            className="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors"
+            className="bg-red-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-red-700 focus:ring-offset-2 transition-colors"
+            type="button"
           >
             Try Again
           </button>
@@ -103,13 +105,14 @@ const SkipSelector: React.FC<SkipSelectorProps> = ({
 
   if (!skips || skips.length === 0) {
     return (
-      <div className="max-w-2xl mx-auto px-4 py-12 text-center">
+      <div className="max-w-2xl mx-auto px-4 py-12 text-center" role="alert" aria-live="polite">
         <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-8">
           <svg
             className="w-12 h-12 text-yellow-500 mx-auto mb-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path
               strokeLinecap="round"
@@ -127,7 +130,8 @@ const SkipSelector: React.FC<SkipSelectorProps> = ({
           </p>
           <button
             onClick={onBack}
-            className="bg-yellow-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition-colors"
+            className="bg-yellow-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-yellow-800 focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-offset-2 transition-colors"
+            type="button"
           >
             Try Different Location
           </button>
@@ -142,10 +146,10 @@ const SkipSelector: React.FC<SkipSelectorProps> = ({
     >
       {/* Header */}
       <div className="text-center mb-10 sm:mb-12">
-        <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-2 sm:mb-4">
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2 sm:mb-4">
           Choose Your Skip Size
         </h1>
-        <p className="text-base sm:text-xl text-gray-600 max-w-2xl mx-auto">
+        <p className="text-base sm:text-xl text-gray-800 max-w-2xl mx-auto">
           Select the skip size that best suits your needs for {postcode} {area}.
         </p>
       </div>
@@ -155,6 +159,7 @@ const SkipSelector: React.FC<SkipSelectorProps> = ({
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-14"
         role="radiogroup"
         aria-label="Skip size options"
+        tabIndex={0}
       >
         {skips.map((skip) => (
           <SkipCard
