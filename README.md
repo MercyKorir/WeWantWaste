@@ -110,8 +110,7 @@ After analyzing the original site, I identified these key issues:
 src/
 ├── components/
 │   ├── ui/           # Reusable UI components
-│   ├── layout/       # Layout components
-│   └── skip/         # Feature-specific components
+│   ├── skeletons/    # Components skeletons
 ├── hooks/            # Custom React hooks
 ├── types/            # TypeScript definitions
 ├── utils/            # Helper functions
@@ -121,7 +120,7 @@ src/
 ## Testing Strategy
 
 - **Component Tests**: User interaction scenarios
-- **Integration Tests**: Complete user flows
+- **Integration Tests**: Complete user flows and API
 - **Accessibility Tests**: Screen reader and keyboard navigation
 - **Performance Tests**: Bundle size and loading times
 
