@@ -21,3 +21,10 @@ export interface ApiError {
   message: string;
   status?: number;
 }
+
+export interface Step {
+  id: number;
+  name: string;
+  completed: boolean;
+  description: string;
+}
