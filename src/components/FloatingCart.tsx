@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import type { Skip } from "../types";
 import {
   getSkipDisplayName,
-  formatPrice,
+  formatPriceWithVat,
   getHirePeriodText,
 } from "../utils/formatters";
 import { ShoppingCart, X, Check, ArrowRight, Trash2 } from "lucide-react";
@@ -45,6 +45,11 @@ const FloatingCart: React.FC<FloatingCartProps> = ({
     onClear();
     setIsExpanded(false);
   };
+
+  const priceBreakdown = formatPriceWithVat(
+    selectedSkip.price_before_vat,
+    selectedSkip.vat
+  );
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
@@ -119,16 +124,30 @@ const FloatingCart: React.FC<FloatingCartProps> = ({
                   {getSkipDisplayName(selectedSkip.size)}
                 </h4>
                 <div className="space-y-1 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Price:</span>
-                    <span className="font-medium text-gray-900">
-                      {formatPrice(
-                        selectedSkip.price_before_vat,
-                        selectedSkip.vat
-                      )}
-                    </span>
+                  {/* Price breakdown */}
+                  <div className="space-y-1">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Subtotal:</span>
+                      <span className="text-gray-900">
+                        {priceBreakdown.beforeVat}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">
+                        VAT ({selectedSkip.vat}%):
+                      </span>
+                      <span className="text-gray-900">
+                        {priceBreakdown.vatAmount}
+                      </span>
+                    </div>
+                    <div className="flex justify-between pt-1 border-t border-gray-200">
+                      <span className="font-medium text-gray-900">Total:</span>
+                      <span className="font-semibold text-gray-900">
+                        {priceBreakdown.total}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between pt-2">
                     <span className="text-gray-600">Period:</span>
                     <span className="text-gray-900">
                       {getHirePeriodText(selectedSkip.hire_period_days)}
