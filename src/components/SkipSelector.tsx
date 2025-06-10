@@ -130,7 +130,7 @@ const SkipSelector: React.FC<SkipSelectorProps> = ({
   }
 
   return (
-    <div className={`max-w-7xl mx-auto px-4 py-8 ${className}`}>
+    <div className={`max-w-7xl mx-auto px-4 pt-28 pb-8 sm:pt-34 sm:pb-8 ${className}`}>
       {/* Header */}
       <div className="text-center mb-10 sm:mb-12">
         <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-2 sm:mb-4">
