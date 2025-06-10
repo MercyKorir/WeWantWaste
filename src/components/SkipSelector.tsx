@@ -4,7 +4,6 @@ import { useSkipData } from "../hooks/useSkipData";
 import SkipCard from "./SkipCard";
 import ProgressIndicator from "./ProgressIndicator";
 import SkipSelectorSkeleton from "./skeletons/SkipSelectorSkeleton";
-import { ChevronLeft } from "lucide-react";
 import FloatingCart from "./FloatingCart";
 
 interface SkipSelectorProps {
@@ -159,19 +158,11 @@ const SkipSelector: React.FC<SkipSelectorProps> = ({
       </div>
 
       {/* Progress Indicator */}
-      <ProgressIndicator selectedSkip={selectedSkip} currentStepID={3} />
-
-      {/* Navigation */}
-      <div className="flex justify-between items-center">
-        <button
-          onClick={onBack}
-          className="flex items-center px-3 sm:px-6 py-3 text-gray-600 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors cursor-pointer"
-          aria-label="Go back to previous step"
-        >
-          <ChevronLeft className="w-5 h-5 mr-2" />
-          Back
-        </button>
-      </div>
+      <ProgressIndicator
+        selectedSkip={selectedSkip}
+        currentStepID={3}
+        handleBack={onBack}
+      />
 
       {/* Floating Selection Cart */}
       <FloatingCart

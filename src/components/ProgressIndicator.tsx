@@ -1,66 +1,283 @@
-import React from "react";
-import type { Skip } from "../types";
+import React, { useState } from "react";
+import type { Skip, Step } from "../types";
+import { CheckCircle, ChevronLeft, ChevronUp, Clock, Info } from "lucide-react";
+import { formatPrice, getSkipDisplayName } from "../utils/formatters";
 
 interface ProgressIndicatorProps {
   selectedSkip: Skip | null;
-  currentStepID: number
+  currentStepID: number;
+  handleBack?: () => void;
 }
 
 const steps = [
-  { id: 1, name: "Postcode", completed: true },
-  { id: 2, name: "Waste Type", completed: true },
-  { id: 3, name: "Select Skip", completed: false },
-  { id: 4, name: "Permit Check", completed: false },
-  { id: 5, name: "Choose Date", completed: false },
-  { id: 6, name: "Payment", completed: false },
+  {
+    id: 1,
+    name: "Postcode",
+    completed: true,
+    description: "Enter your postcode to find available services",
+  },
+  {
+    id: 2,
+    name: "Waste Type",
+    completed: true,
+    description: "Select the type of waste you need to dispose of",
+  },
+  {
+    id: 3,
+    name: "Select Skip",
+    completed: false,
+    description: "Choose the right skip size for your needs",
+  },
+  {
+    id: 4,
+    name: "Permit Check",
+    completed: false,
+    description: "Verify if a permit is required for your location",
+  },
+  {
+    id: 5,
+    name: "Choose Date",
+    completed: false,
+    description: "Select your preferred delivery and collection dates",
+  },
+  {
+    id: 6,
+    name: "Payment",
+    completed: false,
+    description: "Complete your order with secure payment",
+  },
 ];
 
 const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
   selectedSkip,
   currentStepID,
+  handleBack,
 }) => {
-  return (
-    <div className="flex justify-center mb-8">
-      <div className="flex items-center space-x-1 sm:space-x-2">
-        {steps.map((step, index) => {
-          const isCurrent = step.id === currentStepID;
-          const isCompleted = step.completed || (index === 2 && selectedSkip);
+  const [showDetails, setShowDetails] = useState(false);
 
-          let circleColor = "bg-gray-300";
-          if (isCompleted && !isCurrent) {
-            circleColor = "bg-green-500";
-          } else if (isCurrent && index === 2 && selectedSkip) {
-            circleColor = "bg-blue-500";
-          } else if (isCurrent) {
-            circleColor = "bg-white border-2 border-green-500";
-          } else if (index === 2 && selectedSkip) {
-            circleColor = "bg-blue-500";
-          }
+  const getStepStatus = (step: Step, index: number) => {
+    const isCurrent = step.id === currentStepID;
+    const isCompleted = step.completed || (index === 2 && selectedSkip);
 
-          let lineColor = "bg-gray-300";
-          if (index < steps.length - 1) {
-            const nextStep = steps[index + 1];
-            const isNextCurrent = nextStep.id === currentStepID;
-            const isNextCompleted = nextStep.completed || (index + 1 === 2 && selectedSkip);
-            if (isNextCompleted || isNextCurrent) {
-              lineColor = "bg-green-500";
-            }
-          }
-          return (
-            <React.Fragment key={step.id}>
+    if (isCompleted && !isCurrent) return "completed";
+    if (isCurrent) return "current";
+    return "pending";
+  };
+
+  const getStepColors = (status: string) => {
+    switch (status) {
+      case "completed":
+        return "bg-green-500 text-white";
+      case "current":
+        return "bg-white border-2 border-green-500 text-green-600";
+      default:
+        return "bg-gray-200 text-gray-400";
+    }
+  };
+
+  const CompactProgress = () => (
+    <div className="flex items-center sm:space-x-2">
+      {steps.map((step, index) => {
+        const status = getStepStatus(step, index);
+        const isLast = index === steps.length - 1;
+
+        return (
+          <div key={step.id} className="flex items-center">
+            <div
+              className={`
+                w-3 sm:w-6 h-3 sm:h-6 p-2.5 sm:p-0 rounded-full flex items-center justify-center transition-all duration-300
+                ${getStepColors(status)}
+                ${status === "current" ? "shadow-md sm:scale-110" : ""}
+              `}
+            >
+              <span className="text-xs font-bold">{step.id}</span>
+            </div>
+
+            {!isLast && (
               <div
-                className={`w-3 h-3 rounded-full ${circleColor}`}
-              ></div>
-              {index < steps.length - 1 && (
-                <div
-                  className={`w-6 sm:w-8 h-1 ${lineColor}`}
-                ></div>
-              )}
-            </React.Fragment>
-          );
-        })}
-      </div>
+                className={`
+                w-4 h-0.5 mx-0.5 sm:mx-1 transition-all duration-300
+                ${
+                  status === "completed" || index < currentStepID - 1
+                    ? "bg-green-500"
+                    : "bg-gray-300"
+                }
+              `}
+              />
+            )}
+          </div>
+        );
+      })}
     </div>
+  );
+
+  const completedSteps = steps.filter(
+    (step, index) => step.completed || (index === 2 && selectedSkip)
+  ).length;
+
+  return (
+    <>
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50 transition-transform duration-300 ease-in-out">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-between px-2 sm:px-4 py-3">
+            {/* Navigation */}
+            <button
+              onClick={handleBack}
+              className="flex items-center px-0 sm:px-6 py-3 text-gray-600 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors cursor-pointer"
+              aria-label="Go back to previous step"
+            >
+              <ChevronLeft className="w-5 h-5 sm:mr-2" />
+              Back
+            </button>
+            <div className="flex flex-col items-center">
+              <span className="text-xs text-gray-500 mb-1">
+                Step {currentStepID} of {steps.length}
+              </span>
+              <CompactProgress />
+            </div>
+
+            <button
+              onClick={() => setShowDetails(!showDetails)}
+              className="flex items-center space-x-0 sm:space-x-2 sm:px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded-lg transition-colors sm:cursor-pointer"
+            >
+              <Info className="w-4 h-4" />
+              <span className="hidden sm:block">Details</span>
+              <ChevronUp
+                className={`w-6 h-6 transition-transform duration-200 ${
+                  showDetails ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+          </div>
+
+          {/* Progress Bar */}
+          <div className="w-full bg-gray-200 h-1">
+            <div
+              className="bg-gradient-to-r from-green-500 to-blue-500 h-1 transition-all duration-500 ease-out"
+              style={{ width: `${(completedSteps / steps.length) * 100}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Details Popup */}
+        {showDetails && (
+          <div className="border-t border-gray-200 bg-gray-50 max-h-96 overflow-y-auto">
+            <div className="max-w-7xl mx-auto px-4 py-6">
+              <div className="mb-4 text-center">
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                  Order Progress Details
+                </h3>
+                <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
+                  <div
+                    className="bg-gradient-to-r from-green-500 to-blue-500 h-3 rounded-full transition-all duration-500 ease-out"
+                    style={{
+                      width: `${(completedSteps / steps.length) * 100}%`,
+                    }}
+                  />
+                </div>
+                <p className="text-sm text-gray-600">
+                  {completedSteps} of {steps.length} steps completed
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {steps.map((step, index) => {
+                  const status = getStepStatus(step, index);
+
+                  return (
+                    <div
+                      key={step.id}
+                      className={`
+                          p-4 rounded-lg border transition-all duration-200 hover:shadow-md
+                          ${
+                            status === "completed"
+                              ? "bg-green-50 border-green-200"
+                              : status === "current"
+                              ? "bg-blue-50 border-blue-200 ring-2 ring-blue-100"
+                              : "bg-white border-gray-200"
+                          }
+                        `}
+                    >
+                      <div className="flex items-start space-x-3">
+                        <div
+                          className={`
+                            w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5
+                            ${getStepColors(status)}
+                          `}
+                        >
+                          {status === "completed" ? (
+                            <CheckCircle className="w-4 h-4 text-white" />
+                          ) : status === "current" ? (
+                            <Clock className="w-4 h-4 text-green-600" />
+                          ) : (
+                            <span className="text-sm font-bold">{step.id}</span>
+                          )}
+                        </div>
+
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center space-x-2 mb-1">
+                            <h4
+                              className={`
+                                font-medium text-sm
+                                ${
+                                  status === "current"
+                                    ? "text-blue-800"
+                                    : status === "completed"
+                                    ? "text-green-800"
+                                    : "text-gray-600"
+                                }
+                              `}
+                            >
+                              {step.name}
+                            </h4>
+                            {status === "current" && (
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                Current
+                              </span>
+                            )}
+                            {status === "completed" && (
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                Complete
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-xs text-gray-600 leading-relaxed mb-2">
+                            {step.description}
+                          </p>
+
+                          {step.id === 3 && selectedSkip && (
+                            <div className="mt-2 p-3 bg-white rounded-lg border border-gray-200 shadow-sm">
+                              <div className="flex items-center space-x-2 mb-1">
+                                <CheckCircle className="w-4 h-4 text-green-500" />
+                                <span className="text-xs font-medium text-gray-800">
+                                  Skip Selected
+                                </span>
+                              </div>
+                              <p className="text-sm font-medium text-gray-900 mb-1">
+                                {getSkipDisplayName(selectedSkip.size)}
+                              </p>
+                              <div className="flex justify-between text-xs text-gray-600">
+                                <span>Size: {selectedSkip.size}</span>
+                                <span className="font-medium text-green-600">
+                                  {formatPrice(
+                                    selectedSkip.price_before_vat,
+                                    selectedSkip.vat
+                                  )}
+                                </span>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 
